@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import { Users, Clock,  Calendar, CheckCircle} from 'lucide-react';
+import { Users, Clock,  Calendar, CheckCircle, Timer} from 'lucide-react';
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -14,7 +14,7 @@ interface MeetingsIF{
     MEETING_ID: string,
     owner: string,
     description: string,
-    url: string,
+    meetingLink: string,
     duration: number,
     title: string,
     status: string,
@@ -61,7 +61,7 @@ export default function DashBoard() {
                 "Content-Type": "application/json",
             },
         })
-
+        console.log(historicMeetingsResponse.data.meetings);
         setHistoricMeetings(historicMeetingsResponse.data.meetings);
 
     }catch(error){
@@ -133,12 +133,27 @@ export default function DashBoard() {
                                                                 <Users className="w-4 h-4 text-orange-500" />
                                                                 <span>{meeting.studentIds? meeting.studentIds.length : null} students</span>
                                                             </div>
+                                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                                <Timer className="w-4 h-4 text-orange-500" />
+                                                                <span>{meeting.studentIds? meeting.time : null}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button className={`w-full mt-3 py-2 ${getStatusColor(meeting.status)} text-white rounded-lg capitalize `}>
+                                                <button className={`w-full mt-3 py-2 ${getStatusColor(meeting.status)} text-white rounded-lg capitalize cursor-pointer`}>
                                                     {meeting.status}
                                                 </button>
+                                                {
+                                                    meeting.status == "ongoing"?
+                                                    <a href={meeting.meetingLink} target="_blank" className="">
+                                                        <button className={`w-full mt-3 py-2 bg-blue-500 text-white rounded-lg capitalize cursor-pointer`}>
+                                                            Join Meeting
+                                                        </button>
+                                                    </a>
+                                                        :
+                                                        <></>
+
+                                                }
                                             </div>
                                         ))
                                     }
