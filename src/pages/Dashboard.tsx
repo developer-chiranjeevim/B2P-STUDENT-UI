@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import { Users, Clock,  Calendar, CheckCircle, Timer, Trash} from 'lucide-react';
+import { Users, Clock,  Calendar, CheckCircle, Timer} from 'lucide-react';
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
 
