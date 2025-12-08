@@ -405,6 +405,11 @@ const Payments : React.FC = () => {
                     )}
                     </div>
                 )}
+                <div className="my-[1rem]">
+                  <button onClick={() => navigate("/dashboard")} className="cursor-pointer w-full capitalize text-center border-[1px] border-blue-500 rounded-md p-3 text-blue-500 font-semibold">
+                    go back
+                  </button>
+                </div>
                 </div>
 
                 <div className="mt-6 text-center text-sm text-gray-600">

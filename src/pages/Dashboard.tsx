@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import { Users, Clock,  Calendar, CheckCircle, Timer} from 'lucide-react';
+import { Users, Clock,  Calendar, CheckCircle, Timer, Trash} from 'lucide-react';
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -22,15 +22,27 @@ interface MeetingsIF{
     time: string,
     studentIds: string,
     share_url: string
-}
+};
+
+
+interface TrasnactionsIF{
+    
+    transaction_id: string,
+    amount: number,
+    date: number,
+    student_id: string,
+};
 
 
 export default function DashBoard() {
-    const transactions = [
-        { id: 'TXN-2024-001', date: 'Nov 15', amount: 299, type: 'payment', description: '100-Day Cycle Payment' },
-        { id: 'TXN-2024-002', date: 'Aug 17', amount: 299, type: 'payment', description: '100-Day Cycle Payment' },
-        { id: 'TXN-2023-003', date: 'May 20', amount: 299, type: 'payment', description: '100-Day Cycle Payment' }
-    ];
+
+    const [transactions, setTransactions] = useState<TrasnactionsIF[]>([]);
+
+    // const transactions = [
+    //     { id: 'TXN-2024-001', date: 'Nov 15', amount: 299, type: 'payment', description: '100-Day Cycle Payment' },
+    //     { id: 'TXN-2024-002', date: 'Aug 17', amount: 299, type: 'payment', description: '100-Day Cycle Payment' },
+    //     { id: 'TXN-2023-003', date: 'May 20', amount: 299, type: 'payment', description: '100-Day Cycle Payment' }
+    // ];
 
 
 
@@ -65,7 +77,15 @@ export default function DashBoard() {
                     "Content-Type": "application/json",
                 },
             })
-            console.log(historicMeetingsResponse.data.meetings);
+
+            const transactionsResponse = await axios.get(`${import.meta.env.VITE_MEETINGS_API}/payments/fetch-transactions`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            })
+            setTransactions(transactionsResponse.data.data);
+            console.log(transactionsResponse.data.data)
             setHistoricMeetings(historicMeetingsResponse.data.meetings);
 
         }catch(error){
@@ -187,11 +207,15 @@ export default function DashBoard() {
                 {/* Today's Schedule */}
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                     <div className="space-y-2">
-                        {transactions.map((transaction) => (
-                        <div key={transaction.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                        {transactions.map((transaction, key) => (
+                        <div key={key} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
                             <div>
-                            <div className="text-md text-gray-900 mb-0.5">{transaction.description}</div>
-                            <div className="text-md text-gray-500">{transaction.date}</div>
+                            <div className="text-md text-gray-900 mb-0.5">ID: {transaction.transaction_id}</div>
+                            <div className="text-md text-gray-500">
+                                {
+                                    new Date(transaction?.date).toLocaleDateString()
+                                }
+                            </div>
                             </div>
                             <div className="flex items-center gap-1">
                             <span className="text-md font-medium text-green-600">₹ {transaction.amount}</span>
@@ -200,9 +224,9 @@ export default function DashBoard() {
                         </div>
                         ))}
                     </div>
-                    <button className="w-full mt-3 text-blue-500 border-[1px] border-blue-500 py-[1rem] rounded-lg text-blue-500 cursor-pointer">
+                    {/* <button className="w-full mt-3 text-blue-500 border-[1px] border-blue-500 py-[1rem] rounded-lg text-blue-500 cursor-pointer">
                         View All Transactions
-                    </button>
+                    </button> */}
                     <button onClick={() => navigate('/payments')} className="w-full mt-3 text-md bg-blue-500 py-[1rem] rounded-lg text-white cursor-pointer">
                         Make Payment
                     </button>
