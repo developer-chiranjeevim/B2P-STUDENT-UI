@@ -20,7 +20,8 @@ interface MeetingsIF{
     status: string,
     date: string,
     time: string,
-    studentIds: string
+    studentIds: string,
+    share_url: string
 }
 
 
@@ -143,6 +144,17 @@ export default function DashBoard() {
                                                 <button className={`w-full mt-3 py-2 ${getStatusColor(meeting.status)} text-white rounded-lg capitalize cursor-pointer`}>
                                                     {meeting.status}
                                                 </button>
+                                                {
+                                                    meeting.share_url?
+                                                        <a href={meeting.share_url} target="_blank" className="">
+                                                            <button className={`w-full mt-3 py-2 bg-green-500 text-white rounded-lg capitalize cursor-pointer`}>
+                                                                watch recording
+                                                            </button>
+                                                        </a>
+                                                    :
+                                                    <></>
+
+                                                }
                                                 {
                                                     meeting.status == "ongoing"?
                                                     <a href={meeting.meetingLink} target="_blank" className="">
