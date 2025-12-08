@@ -2,6 +2,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import DashBoard from "./pages/Dashboard";
+import Payments from "./pages/Payments";
+
 
 const App: React.FC = () => {
 
@@ -9,6 +11,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/dashboard" element={<DashBoard />} /> 
+      <Route path="/payments" element={<Payments />} />
     </Routes>
   );
 

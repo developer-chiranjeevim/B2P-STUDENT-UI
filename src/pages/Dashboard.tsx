@@ -33,6 +33,8 @@ export default function DashBoard() {
     ];
 
 
+
+
     const [historicMeetings, setHistoricMeetings] = useState<MeetingsIF[]>([]);
 
 
@@ -51,42 +53,43 @@ export default function DashBoard() {
 
 
 
+    
 
-  const fetchData = async(token: string) => {
+    const fetchData = async(token: string) => {
 
-    try{
+        try{
 
-        const historicMeetingsResponse = await axios.get(`${import.meta.env.VITE_MEETINGS_API}/meetings/fetch-student-historic-meetings`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        })
-        console.log(historicMeetingsResponse.data.meetings);
-        setHistoricMeetings(historicMeetingsResponse.data.meetings);
+            const historicMeetingsResponse = await axios.get(`${import.meta.env.VITE_MEETINGS_API}/meetings/fetch-student-historic-meetings`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            })
+            console.log(historicMeetingsResponse.data.meetings);
+            setHistoricMeetings(historicMeetingsResponse.data.meetings);
 
-    }catch(error){
-        if(axios.isAxiosError(error)){
-            alert(`ERROR WHILE FETCHING DATA: ${error.message}`)
-        }else{
-            alert(`UNKNOWN ERROR: ${error}`);
+        }catch(error){
+            if(axios.isAxiosError(error)){
+                alert(`ERROR WHILE FETCHING DATA: ${error.message}`)
+            }else{
+                alert(`UNKNOWN ERROR: ${error}`);
+            };
         };
     };
-  };
 
 
 
-  useEffect(() => {
-    const value = sessionStorage.getItem("B2P-STUDENT-ACCESS-TOKEN");
-    const token = value ? JSON.parse(value) : null;
-    const date = Date.now();
-    if (!token || date > token.expiry) {
-      navigate("/");
-    } else {
-      console.log(token);
-      fetchData(token.token);
-    }
-  }, []);
+    useEffect(() => {
+        const value = sessionStorage.getItem("B2P-STUDENT-ACCESS-TOKEN");
+        const token = value ? JSON.parse(value) : null;
+        const date = Date.now();
+        if (!token || date > token.expiry) {
+        navigate("/");
+        } else {
+        console.log(token);
+        fetchData(token.token);
+        }
+    }, []);
 
 
 
@@ -200,8 +203,8 @@ export default function DashBoard() {
                     <button className="w-full mt-3 text-blue-500 border-[1px] border-blue-500 py-[1rem] rounded-lg text-blue-500 cursor-pointer">
                         View All Transactions
                     </button>
-                    <button className="w-full mt-3 text-md bg-blue-500 py-[1rem] rounded-lg text-white cursor-pointer">
-                        Pay Current Bills
+                    <button onClick={() => navigate('/payments')} className="w-full mt-3 text-md bg-blue-500 py-[1rem] rounded-lg text-white cursor-pointer">
+                        Make Payment
                     </button>
                 </div>
             </div>
